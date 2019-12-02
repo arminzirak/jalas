@@ -1,3 +1,5 @@
+import json
+
 import requests
 from requests.exceptions import HTTPError
 
@@ -14,7 +16,8 @@ def get_rooms(start, end, timeout=3):
     except Exception as err:
         return f'Other error occurred: {err}'  # Python 3.6
     else:
-        return response.content
+        rooms = json.loads(response.content.decode('utf-8').replace("'", '"'))['availableRooms']
+        return rooms
 
 
 # res = get_rooms("2017-09-13T19:00:00", "2020-09-13T20:00:00", 5)
