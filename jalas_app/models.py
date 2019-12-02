@@ -12,4 +12,5 @@ class Meeting(models.Model):
 
 
 class Poll(models.Model):
+    meeting = models.ForeignKey(Meeting, related_name='polls', on_delete=models.CASCADE, null=True)
     votes = models.IntegerField(default=0)
