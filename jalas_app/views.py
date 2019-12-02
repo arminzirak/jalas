@@ -45,7 +45,8 @@ def reserve_room(request):
     poll = get_object_or_404(Poll, id=id)
     start_date = str(poll.start_date).replace(" ", "T")[:-6]
     end_date = str(poll.start_date).replace(" ", "T")[:-6]
-    result = room_srever_reserver_room(room_number, KHOSRAVI, start_date, end_date)
+    result, status_code = room_srever_reserver_room(room_number, KHOSRAVI, start_date, end_date)
 
-    notify_meeting_owner("jalas.445317@gmail.com")
-    return HttpResponse(result)
+    if status_code != 400:
+        notify_meeting_owner("jalas.445317@gmail.com")
+    return HttpResponse(result, status=status_code)

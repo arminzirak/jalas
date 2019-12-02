@@ -52,7 +52,7 @@ def reserve_room(room_number, username, start, end):
     except Exception as err:
         return f'Other error occurred: {err}'
     else:
-        return response.text
+        return response.text, response.status_code
 
 
 
