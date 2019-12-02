@@ -27,9 +27,9 @@ def get_rooms(start, end, timeout=3):
 def reserve_room(room_number, username, start, end):
     import requests
 
-    url = "http://213.233.176.40/rooms/801/reserve"
+    url = "http://213.233.176.40/rooms/"+room_number+"/reserve"
 
-    payload = "{\n        \"username\": \"rkhosravi\",\n        \"start\": \"2019-09-13T19:00:00\",\n        \"end\": \"2019-09-13T20:00:00\"\n\t\n}"
+    payload = "{\n        \"username\": \""+username+"\",\n        \"start\": \""+start+"\" ,\n        \"end\": \""+end+"\" \n\t\n}"
     
     # payload = {
     #     "username": username,
@@ -39,7 +39,6 @@ def reserve_room(room_number, username, start, end):
     headers = {
     'Content-Type': "application/json",
     'cache-control': "no-cache",
-    'Postman-Token': "eda3ddf2-adee-4304-9b70-5989ba41ad2a"
     }
     try:
         response = requests.request("POST", url, data=payload, headers=headers)

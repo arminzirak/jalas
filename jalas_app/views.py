@@ -30,7 +30,7 @@ def get_rooms_available(request):
     start_date = request.query_params.get('start')
     end_date = request.query_params.get('end')
     rooms = get_rooms(start_date, end_date)
-    return HttpResponse(json.dumps(rooms))
+    return HttpResponse(json.dumps(str(rooms)))
 
 
 @csrf_exempt
