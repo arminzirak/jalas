@@ -30,12 +30,12 @@ def reserve_room(room_number, username, start, end):
     url = "http://213.233.176.40/rooms/801/reserve"
 
     payload = "{\n        \"username\": \"rkhosravi\",\n        \"start\": \"2019-09-13T19:00:00\",\n        \"end\": \"2019-09-13T20:00:00\"\n\t\n}"
-    payload = {
-        "username": username,
-        "start": start,
-        "end": end,
-    }
-    payload = str(payload)
+    
+    # payload = {
+    #     "username": username,
+    #     "start": start,
+    #     "end": end,
+    # }
     headers = {
     'Content-Type': "application/json",
     'cache-control': "no-cache",
