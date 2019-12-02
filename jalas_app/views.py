@@ -40,12 +40,11 @@ def reserve_room(request):
 	# print(request.body.get('id'))
 	# print(data)
 	data = json.loads(request.body.decode('utf-8'))
-	id = data.get('id')
+	id = data.get('poll_id')
 	room_number = data.get('room_number')
 	print(id, room_number)
 	poll = get_object_or_404(Poll, id = id)
 	start_date = str(poll.start_date).replace(" ", "T")[:-6]
 	end_date = str(poll.start_date).replace(" ", "T")[:-6]
-	print("2019-09-13T19:00:00", "2019-09-13T20:00:00", room_number)
 	result = room_srever_reserver_room(room_number, KHOSRAVI, start_date, end_date)
 	return HttpResponse(result)
