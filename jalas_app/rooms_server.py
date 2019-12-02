@@ -31,7 +31,7 @@ def reserve_room(room_number, username, start, end):
         "start": start,
         "end": end
     }
-    print("fsfsdf")
+    print(start, end)
     try:
         response = requests.post(uri, body)
         response.raise_for_status()
