@@ -13,4 +13,5 @@ class Meeting(models.Model):
 
 class Poll(models.Model):
     meeting = models.ForeignKey(Meeting, related_name='polls', on_delete=models.CASCADE, null=True)
-    votes = models.IntegerField(default=0)
+    votes_agree = models.IntegerField(default=0)
+    votes_disagree = models.IntegerField(default=0)
