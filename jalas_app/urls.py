@@ -5,6 +5,7 @@ from jalas_app import views
 
 urlpatterns = [
     path('meeting/', views.MeetingList.as_view()),
-    path('room/available', views.get_rooms_available)
+    path('meeting/<int:pk>', views.MeetingDetail.as_view()),
+    path('room/available', views.get_rooms_available),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

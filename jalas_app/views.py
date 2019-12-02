@@ -14,6 +14,11 @@ class MeetingList(generics.ListAPIView):
     serializer_class = MeetingSerializer
 
 
+class MeetingDetail(generics.RetrieveUpdateAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+
+
 @api_view(['GET'])
 def get_rooms_available(request):
     start_date = request.query_params.get('start')

@@ -9,8 +9,8 @@ class Meeting(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100)
 
-    start_date = models.DateTimeField(default=datetime.datetime.now())
-    end_date = models.DateTimeField(default=datetime.datetime.now())
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ['created']
