@@ -217,3 +217,5 @@ modules.xml
 .history
 
 # End of https://www.gitignore.io/api/django,pycharm+all,visualstudiocode
+
+env/*
