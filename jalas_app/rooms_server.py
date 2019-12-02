@@ -1,20 +1,22 @@
+import json
+
 import requests
 from requests.exceptions import HTTPError
 
 
 def get_rooms(start, end, timeout=3):
     uri = f'http://213.233.176.40/available_rooms?start={start}&end={end}'
-
     try:
         response = requests.get(uri, timeout=timeout)
         response.raise_for_status()
-
     except HTTPError as http_err:
         return f'HTTP error occurred: {http_err}'  # Python 3.6
     except Exception as err:
         return f'Other error occurred: {err}'  # Python 3.6
-    else:
-        return response.content
+
+    else: # TODO: is it necessary to put else here?
+        rooms = json.loads(response.content.decode('utf-8').replace("'", '"'))['availableRooms']
+        return rooms
 
 
 res = get_rooms("2017-09-13T19:00:00", "2020-09-13T20:00:00", 5)

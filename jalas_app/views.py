@@ -2,11 +2,9 @@ import dateutil.parser
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.shortcuts import get_object_or_404
-
-from django.http import QueryDict
 
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.decorators import api_view
 
@@ -32,7 +30,7 @@ def get_rooms_available(request):
     start_date = request.query_params.get('start')
     end_date = request.query_params.get('end')
     rooms = get_rooms(start_date, end_date)
-    return HttpResponse(rooms)
+    return HttpResponse(json.dumps(rooms))
 
 @csrf_exempt
 @api_view(['POST'])
