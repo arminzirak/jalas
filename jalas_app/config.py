@@ -1,6 +1,6 @@
-MEETING_LOG_ADDRESS = "meeting_logs.csv"
+MEETING_LOG_ADDRESS = "jalas_app/logs/meeting_logs.csv"
 
-TIMING_LOG_ADDRESS = "timings.csv"
+TIMING_LOG_ADDRESS = "jalas_app/logs/timings.csv"
 
 USERNAME = 'rkhosravi'
 
