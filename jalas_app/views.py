@@ -1,3 +1,4 @@
+import datetime
 import json
 import threading
 
@@ -38,6 +39,7 @@ def get_rooms_available(request):
 @csrf_exempt
 @api_view(['POST'])
 def reserve_room(request):
+    start_time = datetime.datetime.now()
     # print(request.body.get('id'))
     # print(data)
     data = json.loads(request.body.decode('utf-8'))
@@ -68,6 +70,9 @@ def reserve_room(request):
         threading.Thread(target=reserve_retry(meeting, room_number, start_date, end_date)).start()
         result = "{\"message\": \"reservation is pending\"}"
     meeting.save()
+    end_time = datetime.datetime.now()
+    with open("time_log.csv", "a") as f:
+        f.write("meeting_processed,{},{},{},{}\n".format(meeting.id, start_date, end_date, (end_time-start_time).seconds))
     return HttpResponse(result, status=status_code)
 
 
