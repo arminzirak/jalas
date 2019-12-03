@@ -1,9 +1,14 @@
 import datetime
+import enum
 
 from django.db import models
 
 
-# Create your models here.
+class MeetingStatus(enum.Enum):
+    init = 0
+    pending = 1
+    finalized = 2
+
 
 class Meeting(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -11,6 +16,10 @@ class Meeting(models.Model):
 
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
+
+    room = models.IntegerField(null=True, blank=True)
+
+    status = models.IntegerField(choices=((tag.value, tag.name) for tag in MeetingStatus))
 
     class Meta:
         ordering = ['created']
@@ -33,3 +42,4 @@ class HoldTime(object):
 
     def __repr__(self):
         return self.start_date + '|' + self.end_date
+

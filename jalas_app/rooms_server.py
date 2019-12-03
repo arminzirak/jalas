@@ -30,32 +30,29 @@ def get_rooms(start, end, timeout=3):
 def reserve_room(room_number, username, start, end):
     import requests
 
-    url = "http://213.233.176.40/rooms/"+room_number+"/reserve"
+    url = f'http://213.233.176.40/rooms/{room_number}/reserve'
 
-    payload = "{\n        \"username\": \""+username+"\",\n        \"start\": \""+start+"\" ,\n        \"end\": \""+end+"\" \n\t\n}"
-    
+    payload = "{\n        \"username\": \"" + username + "\",\n        \"start\": \"" + start + "\",\n        \"end\": \"" + end + "\"\n\t\n}"
+
     # payload = {
     #     "username": username,
     #     "start": start,
     #     "end": end,
     # }
     headers = {
-    'Content-Type': "application/json",
-    'cache-control': "no-cache",
+        'Content-Type': "application/json",
+        'cache-control': "no-cache",
     }
     try:
         response = requests.request("POST", url, data=payload, headers=headers)
-        print (response.text)
-        response.raise_for_status()
 
     except HTTPError as http_err:
         return f'HTTP error occurred: {http_err}'
     except Exception as err:
         return f'Other error occurred: {err}'
     else:
-        return response.content
+        return response.text, response.status_code
 
 
-
-res = reserve_room("801", "rkhosravi", "2019-09-13T19:00:00", "2019-09-13T20:00:00")
+res = reserve_room("803", "rkhosravi", "2019-09-13T19:00:00", "2019-09-13T20:00:00")
 print(res)
