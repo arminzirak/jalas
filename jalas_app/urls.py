@@ -7,6 +7,7 @@ urlpatterns = [
     path('meeting/', views.MeetingList.as_view()),
     path('meeting/<int:pk>', views.MeetingDetail.as_view()),
     path('room/available', views.get_rooms_available),
-    path('room/reserve', views.reserve_room)
+    path('room/reserve', views.reserve_room),
+    path('room/cacel_meeting', view.cancel_meeting)
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

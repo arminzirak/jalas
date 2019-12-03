@@ -8,6 +8,7 @@ class MeetingStatus(enum.Enum):
     init = 0
     pending = 1
     finalized = 2
+    canceled = 3
 
 
 class Meeting(models.Model):

@@ -61,3 +61,13 @@ def reserve_room(request):
         meeting.status = models.MeetingStatus.pending.value
     meeting.save()
     return HttpResponse(result, status=status_code)
+
+
+@api_view(['POST'])
+def cancel_meeting(request):
+    data = json.loads(request.body.decode('utf-8'))
+    meeting_id = data.get('meeting_id')
+    meeting = get_object_or_404(Meeting, id=meeting_id)
+    meeting.status = 3
+    meeting.save()
+    return HttpResponse(status=200)
