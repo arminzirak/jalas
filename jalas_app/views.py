@@ -1,5 +1,6 @@
 import datetime
 import json
+import threading
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -74,7 +75,7 @@ def reserve_retry(meeting, room_number, start_date, end_date):
             return
 
 
-def reserve_room_service(meeting, room_number, start_date, end_date, attempt=0):
+def reserve_room_service(meeting, room_number, start_date, end_date, attempt=1):
     result, status_code = server_reserve_room(room_number, USERNAME, start_date, end_date)
     if status_code == 200:
         with open(MEETING_LOG_ADDRESS, "a") as f:
@@ -87,19 +88,26 @@ def reserve_room_service(meeting, room_number, start_date, end_date, attempt=0):
     elif status_code == 400:
         with open(MEETING_LOG_ADDRESS, "a") as f:
             f.write("meeting_cancelled,{},{}\n".format(meeting.id, 'room_already_reserved'))
-        print('found room already reserved in {} attempt'.format(attempt + 1))
+        print('found room already reserved in {} attempt'.format(attempt))
         meeting.status = models.MeetingStatus.errored.value
         meeting.save()
         return result, status_code
     else:
-        if attempt >= 3:
+        if attempt >= 4:
             with open(MEETING_LOG_ADDRESS, "a") as f:
                 f.write("meeting_cancelled,{},{}\n".format(meeting.id, 'sever_unavailable'))
             print('attempts ended up failed')
             meeting.status = models.MeetingStatus.errored.value
             meeting.save()
             return result, status_code
-        else:
+        elif attempt > 1:
             reserve_room_service(meeting, room_number, start_date, end_date, attempt + 1)
+            meeting.status = models.MeetingStatus.pending.value
+            meeting.save()
+            return result, status_code
+        else:
+            threading.Thread(target=reserve_room_service, args=(meeting, room_number, start_date, end_date, 2)).start()
             result = "{\"message\": \"reservation is pending\"}"
+            meeting.status = models.MeetingStatus.pending.value
+            meeting.save()
             return result, status_code
