@@ -1,4 +1,5 @@
 import json
+import threading
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -60,6 +61,7 @@ def reserve_room(request):
     else:
         status_code = 200
         meeting.status = models.MeetingStatus.pending.value
+        threading.Thread(target=reserve_retry(meeting, room_number, start_date, end_date)).start()
         result = "{\"message\": \"reservation is pending\"}"
     meeting.save()
     return HttpResponse(result, status=status_code)
@@ -73,3 +75,21 @@ def cancel_meeting(request):
     meeting.status = 3
     meeting.save()
     return HttpResponse(status=200)
+
+
+def reserve_retry(meeting, room_number, start_date, end_date):
+    print('started retrying...')
+    for i in range(3):
+        print('attempt {}'.format(i + 1))
+        result, status_code = room_srever_reserver_room(room_number, KHOSRAVI, start_date, end_date)
+        if status_code == 200:
+            print('reserved in {} attempt'.format(i + 1))
+            notify_meeting_owner("jalas.445317@gmail.com")
+            meeting.status = models.MeetingStatus.finalized.value
+            return
+        elif status_code == 400:
+            print('found room already reserved in {} attempt'.format(i + 1))
+            meeting.status = models.MeetingStatus.errored.value
+            return
+    print('attempts ended up failed')
+    meeting.status = models.MeetingStatus.errored.value
