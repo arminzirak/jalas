@@ -56,7 +56,11 @@ def reserve_room(request):
     if status_code == 200:
         notify_meeting_owner("jalas.445317@gmail.com")
         meeting.status = models.MeetingStatus.finalized.value
+        with open("meetings_log.csv", "a") as f:
+            f.write("meeting_finalized,{},{}\n".format(meeting.id, 'ok'))
     elif status_code == 400:
+        with open("meetings_log.csv", "a") as f:
+            f.write("meeting_cancelled,{},{}\n".format(meeting.id, 'room_already_reserved'))
         pass
     else:
         status_code = 200
@@ -83,13 +87,19 @@ def reserve_retry(meeting, room_number, start_date, end_date):
         print('attempt {}'.format(i + 1))
         result, status_code = room_srever_reserver_room(room_number, KHOSRAVI, start_date, end_date)
         if status_code == 200:
+            with open("meetings_log.csv", "a") as f:
+                f.write("meeting_finalized,{},{}\n".format(meeting.id, 'ok'))
             print('reserved in {} attempt'.format(i + 1))
             notify_meeting_owner("jalas.445317@gmail.com")
             meeting.status = models.MeetingStatus.finalized.value
             return
         elif status_code == 400:
+            with open("meetings_log.csv", "a") as f:
+                f.write("meeting_cancelled,{},{}\n".format(meeting.id, 'room_already_reserved'))
             print('found room already reserved in {} attempt'.format(i + 1))
             meeting.status = models.MeetingStatus.errored.value
             return
+    with open("meetings_log.csv", "a") as f:
+        f.write("meeting_cancelled,{},{}\n".format(meeting.id, 'sever_unavailable'))
     print('attempts ended up failed')
     meeting.status = models.MeetingStatus.errored.value
