@@ -20,13 +20,6 @@ def get_rooms(start, end, timeout=3):
         return rooms
 
 
-# res = get_rooms("2017-09-13T19:00:00", "2020-09-13T20:00:00", 5)
-# print(res)
-
-
-# TODO: remove these examples
-
-
 def reserve_room(room_number, username, start, end, timeout=3):
     import requests
 
@@ -34,11 +27,6 @@ def reserve_room(room_number, username, start, end, timeout=3):
 
     payload = "{\n        \"username\": \"" + username + "\",\n        \"start\": \"" + start + "\",\n        \"end\": \"" + end + "\"\n\t\n}"
 
-    # payload = {
-    #     "username": username,
-    #     "start": start,
-    #     "end": end,
-    # }
     headers = {
         'Content-Type': "application/json",
         'cache-control': "no-cache",
@@ -52,12 +40,5 @@ def reserve_room(room_number, username, start, end, timeout=3):
     except HTTPError as http_err:
         print('Http error occurred')
         return f'HTTP error occurred: {http_err}'
-    # except Exception as err:
-    #     print('c')
-    #     return f'Other error occurred: {err}'
     else:
         return response.text, response.status_code
-
-
-res = reserve_room("803", "rkhosravi", "2019-09-13T19:00:00", "2019-09-13T20:00:00")
-print(res)
