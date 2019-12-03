@@ -50,7 +50,8 @@ def reserve_room(request):
     end_date = str(poll.end_date).replace(" ", "T")[:-6]
     print(start_date + ' ' + end_date)
     result, status_code = room_srever_reserver_room(room_number, KHOSRAVI, start_date, end_date)
-
+    print('result: ' + str(result))
+    print('status_code: ' + str(status_code))
     if status_code == 200:
         notify_meeting_owner("jalas.445317@gmail.com")
         meeting.status = models.MeetingStatus.finalized.value
@@ -59,6 +60,7 @@ def reserve_room(request):
     else:
         status_code = 200
         meeting.status = models.MeetingStatus.pending.value
+        result = "{\"message\": \"reservation is pending\"}"
     meeting.save()
     return HttpResponse(result, status=status_code)
 

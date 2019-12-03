@@ -1,7 +1,7 @@
 import json
 
 import requests
-from requests.exceptions import HTTPError
+from requests.exceptions import HTTPError, Timeout
 
 
 def get_rooms(start, end, timeout=3):
@@ -27,7 +27,7 @@ def get_rooms(start, end, timeout=3):
 # TODO: remove these examples
 
 
-def reserve_room(room_number, username, start, end):
+def reserve_room(room_number, username, start, end, timeout=3):
     import requests
 
     url = f'http://213.233.176.40/rooms/{room_number}/reserve'
@@ -44,12 +44,17 @@ def reserve_room(room_number, username, start, end):
         'cache-control': "no-cache",
     }
     try:
-        response = requests.request("POST", url, data=payload, headers=headers)
+        response = requests.request("POST", url, data=payload, headers=headers, timeout=timeout)
 
+    except Timeout as timeout_exception:
+        print('Gateway Timeout')
+        return "Gateway Timeout", 504
     except HTTPError as http_err:
+        print('Http error occurred')
         return f'HTTP error occurred: {http_err}'
-    except Exception as err:
-        return f'Other error occurred: {err}'
+    # except Exception as err:
+    #     print('c')
+    #     return f'Other error occurred: {err}'
     else:
         return response.text, response.status_code
 

@@ -17,11 +17,8 @@ GET http://127.0.0.1:8000/meeting/1
 GET http://127.0.0.1:8000/room/available?start=2018-09-13T20:00:00&end=2018-09-13T21:00:00
 
 ###
-POST http://localhost:8000/room/reserve
+POST http://127.0.0.1:8000/room/reserve
 {
-	"username": "rkhosravi",
-	"start": "2019-09-13T19:00:00",
-	"end": "2019-09-13T20:00:00",
 	"room_id": 1,
 	"poll_id": 2
 }
