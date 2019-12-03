@@ -51,7 +51,7 @@ def reserve_room(request):
 
     end_time = datetime.datetime.now()
     with open(TIMING_LOG_ADDRESS, "a") as f:
-        f.write("meeting_processed,{},{},{},{}\n".format(meeting.id, start_date, end_date, (end_time - start_time).seconds))
+        f.write("meeting_processed,{},{},{},{}\n".format(meeting.id, start_date, end_date, (end_time - start_time).microseconds))
     return HttpResponse(result, status=status_code)
 
 
