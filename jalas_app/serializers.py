@@ -9,7 +9,7 @@ class MeetingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Meeting
-        fields = ['id', 'created', 'title', 'polls', 'start_date', 'end_date']
+        fields = ['id', 'created', 'title', 'polls', 'start_date', 'end_date', 'status']
         depth = 1
 
 
