@@ -32,7 +32,6 @@ class Poll(models.Model):
     votes_agree = models.IntegerField(default=0)
     votes_disagree = models.IntegerField(default=0)
 
-    # TODO: use HoldTime
     start_date = models.DateTimeField(default=datetime.datetime.now())
     end_date = models.DateTimeField(default=datetime.datetime.now())
 

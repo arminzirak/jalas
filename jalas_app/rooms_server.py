@@ -3,9 +3,11 @@ import json
 import requests
 from requests.exceptions import HTTPError, Timeout
 
+from jalas_app.config import SERVER_URL
+
 
 def get_rooms(start, end, timeout=3):
-    uri = f'http://213.233.176.40/available_rooms?start={start}&end={end}'
+    uri = f'{SERVER_URL}/available_rooms?start={start}&end={end}'
 
     try:
         response = requests.get(uri, timeout=timeout)
@@ -23,7 +25,7 @@ def get_rooms(start, end, timeout=3):
 def reserve_room(room_number, username, start, end, timeout=3):
     import requests
 
-    url = f'http://213.233.176.40/rooms/{room_number}/reserve'
+    url = f'{SERVER_URL}/rooms/{room_number}/reserve'
 
     payload = "{\n        \"username\": \"" + username + "\",\n        \"start\": \"" + start + "\",\n        \"end\": \"" + end + "\"\n\t\n}"
 
