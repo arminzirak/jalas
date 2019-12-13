@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from jalas_app import models
-from jalas_app.models import Option, Poll, Person
+from jalas_app.models import Attendees, Option, Person, Poll
 
 
 
@@ -34,33 +34,53 @@ class PersonSerilizer(serializers.ModelSerializer):
         fields = ['email']
 
 
+class AttendeesSerializer(serializers.Serializer):
+    class Meta:
+        model = models.Attendees
+        fields = ('email')
+
+
 class PollSerializer(serializers.ModelSerializer):
     start_date = serializers.DateTimeField(allow_null=True)
     end_date = serializers.DateTimeField(allow_null=True)
 
     options_set = OptionSerializer(many=True)
-    guests = PersonSerilizer(many = True)
-    
+    attendees = AttendeesSerializer(many=True)
+
     def create_options(self, options_set, poll):
         for option in options_set:
             option = Option.objects.create(**option)
             option.poll = poll
             option.save()
 
-    def create_person(self, person_data):
+    def create_person(self, person_data, poll):
+        print('I am here 6')
         for person in person_data:
-            Person.objects.create(person_data)
+            print('I am here 7: {}'.format(person))
+            personn = Person.objects.create(**person) #TODO: create if not exists
+            print('I am here 70: {}'.format(person))            
+            attendee = Attendees.objects.create()
+            print('I am here 700: {}'.format(person))
+            attendee.person = personn
+            print('I am here 7000: {}'.format(person))
+            attendee.polls = poll
+            attendee.save()
 
     def create(self, validated_data):
-        person_data = validated_data.pop('guests')
+        print(validated_data)
+        person_data = validated_data.pop('attendees')
         options_set = validated_data.pop('options_set')
         poll = Poll.objects.create(**validated_data)
-        self.create_person(person_data)
+        print('I am here 4')
+        self.create_person(person_data, poll)
+        print('I am here 5')
+
         self.create_options(options_set, poll)
 
         return poll
 
     class Meta:
         model = models.Poll
-        fields = ('id', 'created', 'title', 'options_set', 'start_date', 'end_date', 'status', 'guests')
+        fields = ('id', 'created', 'title', 'options_set', 'start_date', 'end_date', 'status', 'attendees')
+
 

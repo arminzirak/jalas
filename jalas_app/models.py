@@ -67,5 +67,5 @@ class Person(models.Model):
 
 
 class Attendees(models.Model):
-    person = models.ForeignKey(Person, related_name = 'attendees', on_delete=models.CASCADE)
-    user = 
+    person = models.ForeignKey(Person, related_name = 'attendees', on_delete=models.CASCADE, null=True, blank=True)
+    polls = models.ForeignKey(Poll, related_name = 'attendees', on_delete=models.CASCADE, null=True, blank=True)
