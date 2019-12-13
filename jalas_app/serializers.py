@@ -14,20 +14,28 @@ class MeetingSerializer(serializers.ModelSerializer):
         depth = 1
 
 
+class VoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Vote
+        fields = ['id', 'vote']
+
+
+class OptionSerializer(serializers.ModelSerializer):
+    votes_set = VoteSerializer(read_only=True, many=True)
+    class Meta:
+        model = models.Option
+        fields = ['id', 'votes_set', 'start_date', 'end_date']
+
+
 class PollSerializer(serializers.ModelSerializer):
     start_date = serializers.DateTimeField(allow_null=True)
     end_date = serializers.DateTimeField(allow_null=True)
 
+    options_set = OptionSerializer(read_only=True, many=True)
+
     class Meta:
         model = models.Poll
-        fields = ['id', 'created', 'title', 'options', 'start_date', 'end_date', 'status']
-        depth = 3
+        fields = ('id', 'created', 'title', 'options_set', 'start_date', 'end_date', 'status')
 
 
 
-
-class OptionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Option
-        fields = ['id', 'votes', 'start_date', 'end_date']
-        depth = 3

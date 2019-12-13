@@ -10,12 +10,20 @@ from rest_framework.decorators import api_view
 
 from jalas_app import models
 from jalas_app.config import *
-from jalas_app.models import Meeting, Option, Poll
+from jalas_app.models import Meeting, Option, Poll, PollStatus
 from jalas_app.notification_service import notify_Poll_owner
 from jalas_app.rooms_server import get_rooms
 from jalas_app.rooms_server import reserve_room as server_reserve_room
 from jalas_app.serializers import MeetingSerializer, PollSerializer
 
+class MeetingList(generics.ListAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+
+
+class MeetingDetail(generics.RetrieveUpdateAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
 
 class PollList(generics.ListAPIView):
     queryset = Poll.objects.all()
@@ -50,29 +58,57 @@ def get_rooms_available(request):
 def reserve_room(request):
     start_time = datetime.datetime.now()
     data = json.loads(request.body.decode('utf-8'))
-    Option_id = data.get('Option_id')
+    option_id = data.get('option_id')
     room_number = data.get('room_number')
-    Option = get_object_or_404(Option, id=Option_id)
-    Poll = Poll.objects.get(id=Option.Poll.id)
-    start_date = str(Option.start_date).replace(" ", "T")[:-6]
-    end_date = str(Option.end_date).replace(" ", "T")[:-6]
-    result, status_code = reserve_room_service(Poll, room_number, start_date, end_date)
+    option = get_object_or_404(Option, id=option_id)
+    poll = Poll.objects.get(id=option.Poll.id)
+    start_date = str(option.start_date).replace(" ", "T")[:-6]
+    end_date = str(option.end_date).replace(" ", "T")[:-6]
+    result, status_code = reserve_room_service(poll, room_number, start_date, end_date)
     if status_code != 400:
         status_code = 200
 
     end_time = datetime.datetime.now()
     with open(TIMING_LOG_ADDRESS, "a") as f:
-        f.write("Poll_processed,{},{},{},{}\n".format(Poll.id, start_date, end_date, (end_time - start_time).microseconds))
+        f.write("Poll_processed,{},{},{},{}\n".format(poll.id, start_date, end_date, (end_time - start_time).microseconds))
     return HttpResponse(result, status=status_code)
 
 
 @api_view(['POST'])
 def cancel_Poll(request):
     data = json.loads(request.body.decode('utf-8'))
-    Poll_id = data.get('Poll_id')
-    Poll = get_object_or_404(Poll, id=Poll_id)
-    Poll.status = 3
-    Poll.save()
+    poll_id = data.get('Poll_id')
+    poll = get_object_or_404(poll, id=poll_id)
+    poll.status = PollStatus.canceled
+    poll.save()
+    return HttpResponse(status=200)
+
+
+@api_view(['POST'])
+def finalize_Poll(request):
+    start_time = datetime.datetime.now()
+    data = json.loads(request.body.decode('utf-8'))
+    option_id = data.get('option_id')
+    room_number = data.get('room_number')
+    option = get_object_or_404(Option, id=option_id)
+    poll = Poll.objects.get(id=option.poll.id)
+    
+    start_date = str(Option.start_date).replace(" ", "T")[:-6]
+    end_date = str(Option.end_date).replace(" ", "T")[:-6]
+    result, status_code = reserve_room_service(poll, room_number, start_date, end_date)
+    if status_code != 400:
+        status_code = 200
+        poll.status = PollStatus.finalized
+        poll.save()
+        meeting = Meeting(title = poll.title, start_date = poll.start_date, end_date = poll.end_date, room = poll.room)
+        meeting.save()
+
+    end_time = datetime.datetime.now()
+    with open(TIMING_LOG_ADDRESS, "a") as f:
+        f.write("poll_processed,{},{},{},{}\n".format(poll.id, start_date, end_date, (end_time - start_time).microseconds))
+
+
+
     return HttpResponse(status=200)
 
 

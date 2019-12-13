@@ -28,7 +28,7 @@ class Poll(models.Model):
 
 
 class Option(models.Model):
-    Poll = models.ForeignKey(Poll, related_name = 'options', on_delete=models.CASCADE, null=True)
+    poll = models.ForeignKey(Poll, related_name = 'options_set', on_delete=models.CASCADE, null=True)
 
     start_date = models.DateTimeField(default=datetime.datetime.now())
     end_date = models.DateTimeField(default=datetime.datetime.now())
@@ -36,7 +36,7 @@ class Option(models.Model):
 
 class Vote(models.Model):
     vote = models.IntegerField(default = 0)
-    option = models.ForeignKey(Option, related_name = 'votes', on_delete=models.CASCADE)
+    option = models.ForeignKey(Option, related_name = 'votes_set', on_delete=models.CASCADE)
 
 
 class Meeting(models.Model):
