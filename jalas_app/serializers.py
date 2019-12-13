@@ -47,6 +47,7 @@ class PollSerializer(serializers.ModelSerializer):
     options_set = OptionSerializer(many=True)
     attendees = AttendeesSerializer(many=True)
 
+
     def create_options(self, options_set, poll):
         for option in options_set:
             option = Option.objects.create(**option)
