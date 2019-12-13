@@ -40,7 +40,7 @@ class PollSerializer(serializers.ModelSerializer):
 
     options_set = OptionSerializer(many=True)
     guests = PersonSerilizer(many = True)
-    
+
     def create_options(self, options_set, poll):
         for option in options_set:
             option = Option.objects.create(**option)
@@ -49,7 +49,7 @@ class PollSerializer(serializers.ModelSerializer):
 
     def create_person(self, person_data):
         for person in person_data:
-            Person.objects.create(person_data)
+            Person.objects.create(person)
 
     def create(self, validated_data):
         person_data = validated_data.pop('guests')

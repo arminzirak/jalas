@@ -65,7 +65,3 @@ class Person(models.Model):
     email = models.CharField(max_length= 100)
     name = models.CharField(default = "Asgar", max_length = 100)
 
-
-class Attendees(models.Model):
-    person = models.ForeignKey(Person, related_name = 'attendees', on_delete=models.CASCADE)
-    user = 
