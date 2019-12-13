@@ -28,7 +28,7 @@ class Poll(models.Model):
 
 
 class Option(models.Model):
-    Poll = models.ForeignKey(Poll, related_name = 'Options', on_delete=models.CASCADE, null=True)
+    Poll = models.ForeignKey(Poll, related_name = 'options', on_delete=models.CASCADE, null=True)
 
     start_date = models.DateTimeField(default=datetime.datetime.now())
     end_date = models.DateTimeField(default=datetime.datetime.now())

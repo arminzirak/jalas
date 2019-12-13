@@ -20,8 +20,8 @@ class PollSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Poll
-        fields = ['id', 'created', 'title', 'Options', 'start_date', 'end_date', 'status']
-        depth = 1
+        fields = ['id', 'created', 'title', 'options', 'start_date', 'end_date', 'status']
+        depth = 3
 
 
 
@@ -29,4 +29,5 @@ class PollSerializer(serializers.ModelSerializer):
 class OptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Option
-        fields = ['id', 'votes', 'Poll', 'start_date', 'end_date']
+        fields = ['id', 'votes', 'start_date', 'end_date']
+        depth = 3
