@@ -21,7 +21,7 @@ class Poll(models.Model):
 
     room = models.IntegerField(null=True, blank=True)
 
-    status = models.IntegerField(choices=((tag.value, tag.name) for tag in PollStatus))
+    status = models.IntegerField(choices=((tag.value, tag.name) for tag in PollStatus), default=0)
 
     class Meta:
         ordering = ['created']
@@ -60,3 +60,12 @@ class HoldTime(object):
     def __repr__(self):
         return self.start_date + '|' + self.end_date
 
+
+class Person(models.Model):
+    email = models.CharField(max_length= 100)
+    name = models.CharField(default = "Asgar", max_length = 100)
+
+
+class Attendees(models.Model):
+    person = models.ForeignKey(Person, related_name = 'attendees', on_delete=models.CASCADE)
+    user = 

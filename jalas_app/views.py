@@ -25,7 +25,7 @@ class MeetingDetail(generics.RetrieveUpdateAPIView):
     queryset = Meeting.objects.all()
     serializer_class = MeetingSerializer
 
-class PollList(generics.ListAPIView):
+class PollList(generics.ListCreateAPIView):
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
 

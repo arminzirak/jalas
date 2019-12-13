@@ -4,9 +4,9 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from jalas_app import views
 
 urlpatterns = [
-    path('Poll/', views.PollList.as_view()),
-    path('Poll/<int:pk>', views.PollDetail.as_view()),
-    path('Poll/<int:pk>/finalize', views.finalize_Poll),
+    path('poll', views.PollList.as_view()),
+    path('poll/<int:pk>', views.PollDetail.as_view()),
+    path('poll/<int:pk>/finalize', views.finalize_Poll),
     path('room/available', views.get_rooms_available),
     path('room/reserve', views.reserve_room), #TODO: should be removed
     path('room/cancel_Poll', views.cancel_Poll),
