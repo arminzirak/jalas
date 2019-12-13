@@ -1,4 +1,4 @@
-MEETING_LOG_ADDRESS = "jalas_app/logs/meeting_logs.csv"
+Poll_LOG_ADDRESS = "jalas_app/logs/Poll_logs.csv"
 
 TIMING_LOG_ADDRESS = "jalas_app/logs/timings.csv"
 

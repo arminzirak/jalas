@@ -202,9 +202,6 @@ modules.xml
 .idea/misc.xml
 *.ipr
 
-# Sonarlint plugin
-.idea/sonarlint
-
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
@@ -220,3 +217,5 @@ modules.xml
 
 env/*
 jalas_app/migrations/*
+
+**/*.csv
